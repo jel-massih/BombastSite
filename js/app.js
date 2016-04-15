@@ -9,7 +9,7 @@ import Bombast from './components/BombastApp.jsx';
 var routes = (
   <Router history={browserHistory}>
     <Route path="/" component={Bombast} />
-    <Route path="/get-bombastengine" component={Register}/>
+    <Route path="/register" component={Register}/>
   </Router>  
 );
 
