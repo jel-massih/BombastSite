@@ -3,12 +3,17 @@ import React from 'react'
 import TextField from './elements/TextField';
 import Button from './elements/Button';
 
+import AccountActions from '../actions/AccountActions';
+
 class Register extends React.Component {
     constructor(props) {
         super(props);
         
         this.state = {
-            formValid: false
+            formValid: false,
+            email: 'jel-massih@hotmail.com',
+            username: 'theflamingskunk',
+            password: 'skunks123'
         };
     }
     
@@ -20,8 +25,6 @@ class Register extends React.Component {
         var emailErrorText = null;
         var passwordClasses = [];
         var passwordErrorText = null;
-        
-        
         
         if(this.state.email !== undefined && !this.validateEmail(this.state.email)) {
             emailClasses.push('fieldValidationError');
@@ -37,7 +40,17 @@ class Register extends React.Component {
             passwordClasses.push('fieldValidationError');
             passwordErrorText = "Passwords must be between 7 and 128 characters, at least 1 number and at least 1 letter.";
         }
-
+        
+        switch(this.state.errorCode) {
+            case 1:
+            case 2:
+                emailClasses.push('fieldValidationError');
+                emailErrorText = this.state.errorMessage;
+                break;
+            default:
+                break;
+        }
+        
         return (
             <div className="bombastAccountModalOverlay">
                 <div className="bombastAccountModalDialog">
@@ -66,7 +79,7 @@ class Register extends React.Component {
     onSignUpClicked() {
         var updatedState = {};
         
-        if(this.state.email === undefined) {
+        if(this.state.username === undefined) {
             updatedState.username = '';
         }
         
@@ -82,6 +95,26 @@ class Register extends React.Component {
         
         if(!this.checkValidForm()) {
             return false;
+        }
+        
+        AccountActions.tryRegister({
+            username: this.state.username,
+            password: this.state.password,
+            email: this.state.email 
+        }, this.onRegisterFailed.bind(this), this.onRegisterSuccess.bind(this));
+    }
+    
+    onRegisterFailed() {
+    }
+    
+    onRegisterSuccess(res) {
+        res = JSON.parse(res);
+        
+        if(res.error) {
+            this.setState({
+                errorCode: res.error.errorCode,
+                errorMessage: res.error.text
+            });
         }
     }
     
@@ -99,6 +132,8 @@ class Register extends React.Component {
         this.setState({
             formValid: valid 
         });
+        
+        return valid;
     }
     
     validateEmail(email) {
@@ -153,10 +188,17 @@ class Register extends React.Component {
     }
     
     onEmailChanged(value) {
-        this.setState({
+        var updatedState = {
             email: value,
             emailValid: this.validateEmail(value)
-        }, this.checkValidForm.bind(this));
+        };
+        
+        if(this.state.errorCode == 2) {
+            updatedState.errorCode = null,
+            updatedState.errorMessage = null
+        };;
+        
+        this.setState(updatedState, this.checkValidForm.bind(this));
     }
     
     onPasswordChanged(value) {

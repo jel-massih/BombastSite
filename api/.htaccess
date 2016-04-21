@@ -1,0 +1,11 @@
+Options +SymLinksIfOwnerMatch
+
+RewriteEngine On
+
+RewriteRule .* - [env=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Yield static media
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Map all other requests to the main front controller, invoking the API router
+RewriteRule ^ api.php?%{QUERY_STRING} [L]
