@@ -39,10 +39,11 @@ class Register extends React.Component {
             passwordClasses.push('fieldValidationError');
             passwordErrorText = "Passwords must be between 7 and 128 characters, at least 1 number and at least 1 letter.";
         }
-        
+
         switch(this.state.errorCode) {
             case 1:
             case 2:
+            case 5:
                 emailClasses.push('fieldValidationError');
                 emailErrorText = this.state.errorMessage;
                 break;
@@ -216,7 +217,7 @@ class Register extends React.Component {
             emailValid: this.validateEmail(value)
         };
         
-        if(this.state.errorCode == 2) {
+        if(this.state.errorCode == 2 || this.state.errorCode == 1 || this.state.errorCode == 5) {
             updatedState.errorCode = null,
             updatedState.errorMessage = null
         };;

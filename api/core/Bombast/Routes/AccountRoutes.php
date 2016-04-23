@@ -9,6 +9,7 @@ class AccountRoutes {
     const ACCOUNT_EMAIL_TAKEN = 2;
     const ACCOUNT_INVALID_PASSWORD = 3;
     const ACCOUNT_DB_WRITE_FAIL = 4;
+    const ACCOUNT_USERNAME_TAKEN = 5;
     
     public static function tryRegister($request) {
         $data = $request->getParsedBody();
@@ -36,6 +37,9 @@ class AccountRoutes {
             case self::ACCOUNT_EMAIL_TAKEN:
                 echo('{"error":{"text":"You already have an account, please sign in.", "errorCode": '.self::ACCOUNT_EMAIL_TAKEN.'}}');
                 break;
+            case self::ACCOUNT_USERNAME_TAKEN:
+                echo('{"error":{"text":"You already have an account, please sign in.", "errorCode": '.self::ACCOUNT_USERNAME_TAKEN.'}}');
+                break;
             case self::ACCOUNT_INVALID_PASSWORD:
                 echo('{"error":{"text":"Password must be at least 7 characters", "errorCode": '.self::ACCOUNT_INVALID_PASSWORD.'}}');
                 break;
@@ -55,6 +59,10 @@ class AccountRoutes {
         
         if(self::emailTaken($email)) {
             return self::ACCOUNT_EMAIL_TAKEN;
+        }
+        
+        if(self::usernameTaken($username)) {
+            return self::ACCOUNT_USERNAME_TAKEN;
         }
         
         if(strlen($password) < 7) {
@@ -77,6 +85,20 @@ class AccountRoutes {
             return true;
         }
         return false;
+    }
+    
+    private static function usernameTaken($username) {
+        global $db_link;
+        if($q = $db_link->prepare("SELECT * FROM bombast_accounts WHERE username = ?"))
+        {
+            $q->bind_param('s', $username);
+            $q->execute();
+            $q->store_result();
+        }
+        if ($q->errno) {
+            return 1;
+        }
+        return $q->affected_rows;
     }
     
     private static function emailTaken($email) {
