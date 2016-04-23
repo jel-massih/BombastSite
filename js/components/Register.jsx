@@ -25,6 +25,7 @@ class Register extends React.Component {
         var emailErrorText = null;
         var passwordClasses = [];
         var passwordErrorText = null;
+        var genericErrorText = null;
         
         if(this.state.email !== undefined && !this.validateEmail(this.state.email)) {
             emailClasses.push('fieldValidationError');
@@ -47,6 +48,12 @@ class Register extends React.Component {
                 emailClasses.push('fieldValidationError');
                 emailErrorText = this.state.errorMessage;
                 break;
+            case 3:
+                passwordClasses.push('fieldValidationError');
+                passwordErrorText = this.state.errorMessage;
+                break;
+            case 4:
+                genericErrorText = this.state.errorMessage;
             default:
                 break;
         }
@@ -62,6 +69,7 @@ class Register extends React.Component {
                             <TextField label="*Email" onChange={this.onEmailChanged.bind(this)} value={this.state.email} classes={emailClasses} errorText={emailErrorText} />
                             <TextField label="*Password" type="password" maxLength={128} onChange={this.onPasswordChanged.bind(this)} value={this.state.password} classes={passwordClasses} errorText={passwordErrorText} />
                             <Button onClick={this.onSignUpClicked.bind(this)} label="Sign Up" isDisabled={!this.state.formValid} />
+                            <span className="fieldValidationError">{genericErrorText}</span>
                         </div>
                         
                         <div className="signInRedirect">

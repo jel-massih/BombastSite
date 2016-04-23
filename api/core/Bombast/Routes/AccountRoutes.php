@@ -26,10 +26,9 @@ class AccountRoutes {
         $salt = uniqid();
         
         $errorCode = self::dbRegister($username, $email, $password, $salt);
-        
         switch($errorCode) {
             case self::ACCOUNT_REGISTER_SUCCESS:
-                echo('{"success":{"text":"Registration Successful!", "errorCode": '.self::ACCOUNT_REGISTER_SUCCESS.'}}');
+                echo('{"error":{"text":"Failed to register Account", "errorCode": '.self::ACCOUNT_DB_WRITE_FAIL.'}}');
                 break;
             case self::ACCOUNT_INVALID_EMAIL:
                 echo('{"error":{"text":"Please enter a valid email address", "errorCode": '.self::ACCOUNT_INVALID_EMAIL.'}}');
