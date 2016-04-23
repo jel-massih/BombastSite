@@ -11,9 +11,7 @@ class Register extends React.Component {
         
         this.state = {
             formValid: false,
-            email: 'jel-massih@hotmail.com',
-            username: 'theflamingskunk',
-            password: 'skunks123'
+            requestPending: false
         };
     }
     
@@ -58,6 +56,12 @@ class Register extends React.Component {
                 break;
         }
         
+        var buttonLabel = "Sign Up";
+
+        if(this.state.requestPending) {
+            buttonLabel = "Submitting...";
+        }
+        
         return (
             <div className="bombastAccountModalOverlay">
                 <div className="bombastAccountModalDialog">
@@ -68,7 +72,7 @@ class Register extends React.Component {
                             <TextField label="*Username" onChange={this.onUsernameChanged.bind(this)} value={this.state.username} classes={usernameClasses} errorText={usernameErrorText} />
                             <TextField label="*Email" onChange={this.onEmailChanged.bind(this)} value={this.state.email} classes={emailClasses} errorText={emailErrorText} />
                             <TextField label="*Password" type="password" maxLength={128} onChange={this.onPasswordChanged.bind(this)} value={this.state.password} classes={passwordClasses} errorText={passwordErrorText} />
-                            <Button onClick={this.onSignUpClicked.bind(this)} label="Sign Up" isDisabled={!this.state.formValid} />
+                            <Button onClick={this.onSignUpClicked.bind(this)} label={buttonLabel} isDisabled={!this.state.formValid || this.state.requestPending} />
                             <span className="fieldValidationError">{genericErrorText}</span>
                         </div>
                         
@@ -105,6 +109,10 @@ class Register extends React.Component {
             return false;
         }
         
+        this.setState({
+            requestPending: true
+        });
+        
         AccountActions.tryRegister({
             username: this.state.username,
             password: this.state.password,
@@ -113,9 +121,16 @@ class Register extends React.Component {
     }
     
     onRegisterFailed() {
+        this.setState({
+            requestPending: false
+        });
     }
     
     onRegisterSuccess(res) {
+        this.setState({
+            requestPending: false
+        });
+        
         res = JSON.parse(res);
         
         if(res.error) {
