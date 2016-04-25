@@ -2,6 +2,7 @@ import React from 'react'
 
 import TextField from './elements/TextField';
 import Button from './elements/Button';
+import { Link } from 'react-router'
 
 import AccountActions from '../actions/AccountActions';
 
@@ -69,7 +70,7 @@ class Register extends React.Component {
                     <span className="logo"></span>
                     <div className="modalContent">
                         <h3 className="subheading">Join the Community</h3>
-                        <div className="bombastAccountRegisterContainer">
+                        <div className="bombastAccountFormContainer">
                             <TextField label="*Username" onChange={this.onUsernameChanged.bind(this)} value={this.state.username} classes={usernameClasses} errorText={usernameErrorText} />
                             <TextField label="*Email" onChange={this.onEmailChanged.bind(this)} value={this.state.email} classes={emailClasses} errorText={emailErrorText} />
                             <TextField label="*Password" type="password" maxLength={128} onChange={this.onPasswordChanged.bind(this)} value={this.state.password} classes={passwordClasses} errorText={passwordErrorText} />
@@ -81,7 +82,7 @@ class Register extends React.Component {
                             <span id="signInRedirectMessage">
                                 Have a Bombast Technology account?
                             </span>
-                            <a><span>Sign In</span></a>
+                            <Link to="/signin">Sign In</Link>
                         </div>
                     </div>
                 </div>

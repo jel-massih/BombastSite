@@ -7,6 +7,10 @@ export default class AccountActions {
         WebApiUtils.post('/api/tryRegister', data, successCallback, errorCallback);
     }
     
+    static tryLogin(data, errorCallback, successCallback) {
+        WebApiUtils.post('/api/tryLogin', data, successCallback, errorCallback);
+    }
+    
     static settingsRetrieved(settings) {
         AppDispatcher.dispatch({
             type: AccountConstants.ACCOUNT_SETTINGS_RETRIEVED,

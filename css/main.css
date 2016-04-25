@@ -1,3 +1,12 @@
+.left {
+    float: left;   
+}
+
+.right {
+    float: right;
+}
+
+/* =============== REGISTER PAGE ===================== */
 .bombastAccountModalOverlay {
     position: fixed;
     top: 0;
@@ -39,12 +48,12 @@
     color: #313131;    
 }
 
-.bombastAccountRegisterContainer .textField {
+.bombastAccountFormContainer .textField {
     position: relative;
     margin-bottom: 20px;
 }
 
-.bombastAccountRegisterContainer .textField>label {
+.bombastAccountFormContainer .textField>label {
     position: absolute;
     padding-top: 10px;
     padding-left: 20px;
@@ -54,8 +63,8 @@
     text-transform: uppercase;
 }
 
-.bombastAccountRegisterContainer .textField>input[type="text"],
-.bombastAccountRegisterContainer .textField>input[type="password"] {
+.bombastAccountFormContainer .textField>input[type="text"],
+.bombastAccountFormContainer .textField>input[type="password"] {
     width: 100%;
     height: 66px;
     padding-top: 26px;
@@ -72,12 +81,12 @@
     text-align: left;
 }
 
-.bombastAccountRegisterContainer .textField>input[type="text"]:focus,
-.bombastAccountRegisterContainer .textField>input[type="password"]:focus {
+.bombastAccountFormContainer .textField>input[type="text"]:focus,
+.bombastAccountFormContainer .textField>input[type="password"]:focus {
     border: 1px solid #00adef;
 }
 
-.bombastAccountRegisterContainer input.fieldValidationError {
+.bombastAccountFormContainer input.fieldValidationError {
     border: 1px solid #991b1e !important;
 }
 
@@ -94,7 +103,7 @@
     box-sizing: border-box;
 }
 
-.bombastAccountRegisterContainer input[type="submit"] {
+.bombastAccountFormContainer input[type="submit"] {
     display: block;
     border: none;
     font-size: 18px;
@@ -109,7 +118,7 @@
     width: 100%;
 }
 
-.bombastAccountRegisterContainer input[type="submit"].disabled {
+.bombastAccountFormContainer input[type="submit"].disabled {
     background-color: #aaabaa;
 }
 
@@ -137,4 +146,13 @@ body, input, select, textarea {
 
 .bombastAccountModalDialog a:hover {
     text-decoration: underline;
+}
+
+/* =============== LOGIN PAGE ===================== */
+.rememberMeCheckContainer .checkContainer {
+    margin: 12px 0 24px 0;
+}
+
+.loginResetPass {
+    margin: 12px 0 24px 0;
 }

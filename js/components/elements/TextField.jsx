@@ -1,6 +1,6 @@
 import React from 'react'
 
-class Register extends React.Component {
+class TextField extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -28,7 +28,7 @@ class Register extends React.Component {
     }
 }
 
-Register.defaultProps = {
+TextField.defaultProps = {
     type: 'text',
     label: '',
     value: '',
@@ -37,4 +37,4 @@ Register.defaultProps = {
     errorText: ''
 }
 
-export default Register;
+export default TextField;

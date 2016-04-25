@@ -24,7 +24,7 @@ class AccountRoutes {
         
         $email = trim(strtolower($email));
         
-        $salt = uniqid();
+        $salt = Auth::GenerateSalt();
         
         $errorCode = self::dbRegister($username, $email, $password, $salt);
         switch($errorCode) {
@@ -69,8 +69,7 @@ class AccountRoutes {
             return self::ACCOUNT_INVALID_PASSWORD;
         }
         
-        $hashedPassword = Auth::hashPassword($password, $salt);
-        
+        $hashedPassword = Auth::generateHash($password, $salt);
         
         if(self::addNewUser($username, $email, $hashedPassword, $salt)) {
             //self::dbSendMessage($email, 1, "Welcome to the Bombast Community!", "We are about to party", "admin@bombasttech.com", "Bombast Technology");
@@ -127,6 +126,77 @@ class AccountRoutes {
             }
             var_dump($db_link->error);
             $q->close();
+        }
+        return false;
+    }
+    
+    private static function printLoginErrorMessage($errorCode) {
+        switch($errorCode) {
+            case 1:
+            case 2:
+                echo('{"error":{"text":"Username or Password are wrong.", "errorCode": -1}}');
+                break;
+            case 3:
+                echo('{"error":{"text":"This Account is not Verified. Please Check Your Email!", "errorCode": -1}}');
+                break;
+            default:
+                echo('{"error":{"text":"Username or Password are wrong.", "errorCode": -1}}');
+                break;
+        }
+    }
+    
+    public static function tryLogin($request) {
+        $data = $request->getParsedBody();
+        
+        $email = $data['email'];
+        $password = $data['password'];
+        
+        if(empty($password) || empty($email)) {
+            echo('{"error":{"text":"Please Fill in All Fields"}}');
+            return;
+        }
+        
+        $email = trim(strtolower($email));
+        
+        $resultCode = self::confirmuser($email, $password);
+        if($resultCode != 0) {
+            self::printLoginErrorMessage($resultCode);
+            return;
+        }
+        echo('{"error":{"text":"Something Went Horribly Wrong! Please try again.", "errorCode": -1}}');
+    }
+    
+    private static function confirmuser($email, $password) {
+        $authInfo = Auth::getAuthInfo($email);
+        
+        if($authInfo == -1) {
+            return 1;
+        }
+        
+        $hash = Auth::generateHash($password, $authInfo['salt']);
+        
+        if($hash != $authInfo['password']) {
+            return 2;
+        }
+        
+        /*
+        if(!self::isVerified($email)) {
+            return 3;
+        }*/
+        
+        return 0;
+    }
+    
+    private static function isVerified($email) {
+        global $db_link;
+        
+        if($q = $db_link->prepare("SELECT email FROM bombast_accounts WHERE email = ? AND verified = 1"))
+        {
+            $q->bind_param('s', $email);
+            $q->execute();
+            while($q->fetch()) {
+                return true;
+            }
         }
         return false;
     }
