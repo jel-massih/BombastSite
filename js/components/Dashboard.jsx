@@ -16,7 +16,7 @@ export default AuthenticatedComponent(class Login extends React.Component {
                             <ul className="personal">
                                 <li className="email">{this.props.user.email}</li>
                                 <li>{this.props.user.username}</li>
-                                <li><a href="/signout">Sign Out</a></li>
+                                <li><a onClick={this.state.onLogoutClicked}>Sign Out</a></li>
                             </ul>
                         </div>
                     </div>
