@@ -7,6 +7,8 @@ import { Link } from 'react-router'
 
 import AccountActions from '../actions/AccountActions';
 
+import AuthService from '../utils/AuthService';
+
 class Login extends React.Component {
 
   constructor(props) {
@@ -77,15 +79,14 @@ class Login extends React.Component {
             requestPending: true
         });
         
-        AccountActions.tryLogin({
-            password: this.state.password,
-            email: this.state.email 
-        }, this.onLoginFailed.bind(this), this.onLoginSuccess.bind(this));
+        AuthService.login(this.state.email, this.state.password)
+            .catch(this.onLoginFailed.bind(this));
     }
     
-    onLoginFailed() {
+    onLoginFailed(res) {
         this.setState({
-            requestPending: false
+            requestPending: false,
+            errorMessage: res && res.message ? res.message : 'Failed To Login (Unknown Error)'
         });
     }
     
@@ -101,6 +102,13 @@ class Login extends React.Component {
                 errorCode: res.error.errorCode,
                 errorMessage: res.error.text
             });
+        } else {
+            const {location} = this.props;
+            if(location.state && location.state.nextPathname) {
+                this.props.router.replace(location.state.nextPathname);
+            } else {
+                this.props.router.replace('/');
+            }
         }
     }
   

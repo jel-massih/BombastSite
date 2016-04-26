@@ -134,13 +134,16 @@ class AccountRoutes {
         switch($errorCode) {
             case 1:
             case 2:
-                echo('{"error":{"text":"Username or Password are wrong.", "errorCode": -1}}');
+                $app->response->setStatus(401);
+                echo('{"message":"Username or Password are wrong.", "errorCode": -1}');
                 break;
             case 3:
-                echo('{"error":{"text":"This Account is not Verified. Please Check Your Email!", "errorCode": -1}}');
+                $app->response->setStatus(402);
+                echo('{"message":"This Account is not Verified. Please Check Your Email!", "errorCode": -1}');
                 break;
             default:
-                echo('{"error":{"text":"Username or Password are wrong.", "errorCode": -1}}');
+                $app->response->setStatus(401);
+                echo('{"message":"Username or Password are wrong.", "errorCode": -1}');
                 break;
         }
     }
@@ -152,39 +155,45 @@ class AccountRoutes {
         $password = $data['password'];
         
         if(empty($password) || empty($email)) {
-            echo('{"error":{"text":"Please Fill in All Fields"}}');
+            $app->response->setStatus(400);
+            echo('{"message":"Please Fill in All Fields"}');
             return;
         }
         
         $email = trim(strtolower($email));
         
-        $resultCode = self::confirmuser($email, $password);
-        if($resultCode != 0) {
-            self::printLoginErrorMessage($resultCode);
+        $result = self::confirmuser($email, $password);
+        if($result->statusCode != 0) {
+            self::printLoginErrorMessage($result->statusCode);
             return;
         }
-        echo('{"error":{"text":"Something Went Horribly Wrong! Please try again.", "errorCode": -1}}');
+        echo(json_encode(array('id_token' => Auth::createToken($result->user))));
     }
     
     private static function confirmuser($email, $password) {
         $authInfo = Auth::getAuthInfo($email);
+        $result = array('statusCode' => 0);
         
         if($authInfo == -1) {
-            return 1;
+            $result['statusCode'] = 1;
+            return $result;
         }
         
         $hash = Auth::generateHash($password, $authInfo['salt']);
         
         if($hash != $authInfo['password']) {
-            return 2;
+            $result['statusCode'] = 2;
+            return $result;
         }
+        
+        $result['user'] = array('email' => $email, 'userId' => $authInfo['userId']);
         
         /*
         if(!self::isVerified($email)) {
             return 3;
         }*/
         
-        return 0;
+        return  (object)$result;
     }
     
     private static function isVerified($email) {

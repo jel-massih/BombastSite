@@ -4,6 +4,7 @@
         "slim/slim": "^3.1",
         "slim/php-view": "^2.0",
         "monolog/monolog": "^1.17",
-        "zendframework/zend-db": "2.2.*@dev"
+        "zendframework/zend-db": "2.2.*@dev",
+        "firebase/php-jwt": "^3.0"
     }
 }
