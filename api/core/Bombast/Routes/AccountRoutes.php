@@ -130,44 +130,51 @@ class AccountRoutes {
         return false;
     }
     
-    private static function printLoginErrorMessage($errorCode) {
+    private static function printLoginErrorMessage($errorCode, $response) {
+        global $app;
         switch($errorCode) {
             case 1:
             case 2:
-                $app->response->setStatus(401);
-                echo('{"message":"Username or Password are wrong.", "errorCode": -1}');
+                $response = $response->withStatus(401);
+                echo('{"message":"Username or Password are wrong."}');
                 break;
             case 3:
-                $app->response->setStatus(402);
-                echo('{"message":"This Account is not Verified. Please Check Your Email!", "errorCode": -1}');
+                $response = $response->withStatus(402);
+                echo('{"message":"This Account is not Verified. Please Check Your Email!"}');
                 break;
             default:
-                $app->response->setStatus(401);
-                echo('{"message":"Username or Password are wrong.", "errorCode": -1}');
+                $response = $response->withStatus(401);
+                echo('{"message":"Username or Password are wrong."}');
                 break;
         }
+        
+        return $response;
     }
     
-    public static function tryLogin($request) {
+    public static function tryLogin($request, $response) {
+        global $app;
+        $response = $response->withHeader('Content-type', 'application/json');
         $data = $request->getParsedBody();
         
         $email = $data['email'];
         $password = $data['password'];
         
         if(empty($password) || empty($email)) {
-            $app->response->setStatus(400);
+            
             echo('{"message":"Please Fill in All Fields"}');
-            return;
+            return $response->setStatus(400);
         }
         
         $email = trim(strtolower($email));
         
         $result = self::confirmuser($email, $password);
         if($result->statusCode != 0) {
-            self::printLoginErrorMessage($result->statusCode);
-            return;
+            $response = self::printLoginErrorMessage($result->statusCode, $response);
+            return $response;
         }
+        
         echo(json_encode(array('id_token' => Auth::createToken($result->user))));
+        return $response;
     }
     
     private static function confirmuser($email, $password) {
@@ -176,17 +183,17 @@ class AccountRoutes {
         
         if($authInfo == -1) {
             $result['statusCode'] = 1;
-            return $result;
+            return (object)$result;
         }
         
         $hash = Auth::generateHash($password, $authInfo['salt']);
         
         if($hash != $authInfo['password']) {
             $result['statusCode'] = 2;
-            return $result;
+            return (object)$result;
         }
         
-        $result['user'] = array('email' => $email, 'userId' => $authInfo['userId']);
+        $result['user'] = array('email' => $email, 'userId' => $authInfo['userId'], 'username' => $authInfo['username']);
         
         /*
         if(!self::isVerified($email)) {

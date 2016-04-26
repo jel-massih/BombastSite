@@ -6,6 +6,25 @@
     float: right;
 }
 
+div, ul {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    pointer-events: all;
+    color: #9658AC;
+}
+
 /* =============== REGISTER PAGE ===================== */
 .bombastAccountModalOverlay {
     position: fixed;
@@ -155,4 +174,142 @@ body, input, select, textarea {
 
 .loginResetPass {
     margin: 12px 0 24px 0;
+}
+
+/*======================= DASHBOARD =================*/
+.account-management {
+    font-family: Lato, Helvetica, Arial, sans-serif;
+}
+
+.account-info {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+    overflow-y: hidden;
+    max-width: 1240px;
+    padding-top: 40px;
+    padding-bottom: 50px;
+}
+
+.profile-img {
+    position: relative;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 16.66666%;
+}
+
+.profile-img span {
+    display: block;
+    margin: 0 auto;
+    background-image: url('https://cdn1.unrealengine.com/2948085/logo-epic-5f523206930e3d5f894cef1e1ac9080e.svg');
+    background-size: 120px 120px;
+    width: 120px;
+    height: 120px;
+}
+
+.profile-info {
+    position: relative;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 70%;
+    margin-top: 20px;
+}
+
+.profile-info .personal {
+    position: relative;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 41.6666%;
+}
+
+.profile-info li {
+    font-size: 16px;
+    line-height: 22px;
+}
+
+.account-management-content {
+    line-height: 1.5;
+    max-width: 1240px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.account-management-content > section {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+    overflow-y: hidden;
+    margin-top: 40px;
+}
+
+.account-management-content .container {
+    position: relative;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.home-download {
+    width: 30%;
+    min-height: 200px;
+    margin-right: 3%;
+    float: left;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #aaabaa;
+    border-radius: 10px;
+}
+
+.bombast-launcher {
+    text-align: center;
+}
+
+.bombast-launcher h1.download {
+    font-family: "Lato", Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    text-transform: none;
+    text-align: center;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+.home-download a.btn-a {
+    margin-top: 10px;
+}
+
+.home-download a.btn-a:before {
+    content: "";
+    background-image: url(/img/dl-icon.png);
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    width: 35px;
+    height: 17px;
+    display: inline-block;
+    margin-left: -20px;
+}
+
+.account .btn-a {
+    display: block;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 40px;
+    background: #9658AC;
+    color: white;
+    font-family: "Lato", Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    text-transform: capitalize;
+    outline: none;
+}
+
+.account .btn-a:hover {
+    text-decoration: none;
+    background: #6b1c88;
 }

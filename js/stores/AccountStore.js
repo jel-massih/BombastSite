@@ -55,7 +55,12 @@ Dispatcher.register(action => {
             break;
         case AccountConstants.LOGIN_USER:
             _jwt = action.jwt;
-            _user = jwt_decode(_jwt);
+            _user = jwt_decode(_jwt).data;
+            AccountStore.emit(USER_LOGGED_IN_EVENT);
+            break;
+        case AccountConstants.LOGOUT_USER:
+            _user = null;
+            _jwt = null;
             AccountStore.emit(USER_LOGGED_IN_EVENT);
             break;
     } 

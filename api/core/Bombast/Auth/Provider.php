@@ -24,13 +24,13 @@ class Provider {
     public static function getAuthInfo($email) {
         global $db_link;
 	
-        if($q = $db_link->prepare("SELECT password, salt, id FROM bombast_accounts WHERE email = ?"))
+        if($q = $db_link->prepare("SELECT password, salt, id, username FROM bombast_accounts WHERE email = ?"))
         {
             $q->bind_param('s', $email);
             $q->execute();
-            $q->bind_result($password, $salt, $userId);
+            $q->bind_result($password, $salt, $userId, $username);
             while($q->fetch()) {
-                return array('password' => $password, 'salt' => $salt, 'userId' => $userId);
+                return array('password' => $password, 'salt' => $salt, 'userId' => $userId, 'username' => $username);
             }
         }
         

@@ -84,32 +84,20 @@ class Login extends React.Component {
     }
     
     onLoginFailed(res) {
+        var errorMessage = 'Failed To Login (Unknown Error)';
+        if(res && res.responseText) {
+            try {
+                var obj = JSON.parse(res.responseText);
+                if(obj && obj.message) {
+                    errorMessage = obj.message;
+                }
+            } catch(err) {}
+        }
+        
         this.setState({
             requestPending: false,
-            errorMessage: res && res.message ? res.message : 'Failed To Login (Unknown Error)'
+            errorMessage: errorMessage
         });
-    }
-    
-    onLoginSuccess(res) {
-        this.setState({
-            requestPending: false
-        });
-        
-        res = JSON.parse(res);
-        
-        if(res.error) {
-            this.setState({
-                errorCode: res.error.errorCode,
-                errorMessage: res.error.text
-            });
-        } else {
-            const {location} = this.props;
-            if(location.state && location.state.nextPathname) {
-                this.props.router.replace(location.state.nextPathname);
-            } else {
-                this.props.router.replace('/');
-            }
-        }
     }
   
   checkValidForm() {

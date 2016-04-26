@@ -15,7 +15,6 @@ class AuthService {
         }))
         .then(function(response) {
             var jwt = response.id_token;
-            console.log(jwt);
             
             AccountActions.loginUser(jwt);
             return true;
