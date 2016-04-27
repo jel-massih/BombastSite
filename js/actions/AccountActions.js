@@ -11,15 +11,12 @@ export default class AccountActions {
     static loginUser(jwt) {
         var savedJwt = localStorage.getItem('jwt');        
 
-        
         Dispatcher.dispatch({
             type: AccountConstants.LOGIN_USER,
             jwt: jwt
         });
         
         if(savedJwt != jwt) {
-            browserHistory.push('/dashboard');
-            
             localStorage.setItem('jwt', jwt);
         }
     }

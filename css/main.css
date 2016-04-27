@@ -23,6 +23,12 @@ a {
     text-decoration: none;
     pointer-events: all;
     color: #9658AC;
+    cursor: pointer;
+}
+
+a:hover {
+    color: #6b1c88;
+    text-decoration: underline;
 }
 
 /* =============== REGISTER PAGE ===================== */
