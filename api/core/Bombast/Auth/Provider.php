@@ -70,4 +70,25 @@ class Provider {
         $unencodedArray = ['jwt' => $jwt];
         return json_encode($unencodedArray);
     }
+    
+    public static function confirmuser($email, $password) {
+        $authInfo = self::getAuthInfo($email);
+        $result = array('statusCode' => 0);
+        
+        if($authInfo == -1) {
+            $result['statusCode'] = 1;
+            return (object)$result;
+        }
+        
+        $hash = self::generateHash($password, $authInfo['salt']);
+        
+        if($hash != $authInfo['password']) {
+            $result['statusCode'] = 2;
+            return (object)$result;
+        }
+        
+        $result['user'] = array('email' => $email, 'userId' => $authInfo['userId'], 'username' => $authInfo['username']);
+        
+        return  (object)$result;
+    }
 }

@@ -162,12 +162,12 @@ class AccountRoutes {
         if(empty($password) || empty($email)) {
             
             echo('{"message":"Please Fill in All Fields"}');
-            return $response->setStatus(400);
+            return $response->withStatus(400);
         }
         
         $email = trim(strtolower($email));
         
-        $result = self::confirmuser($email, $password);
+        $result = Auth::confirmuser($email, $password);
         if($result->statusCode != 0) {
             $response = self::printLoginErrorMessage($result->statusCode, $response);
             return $response;
@@ -175,32 +175,6 @@ class AccountRoutes {
         
         echo(json_encode(array('id_token' => Auth::createToken($result->user))));
         return $response;
-    }
-    
-    private static function confirmuser($email, $password) {
-        $authInfo = Auth::getAuthInfo($email);
-        $result = array('statusCode' => 0);
-        
-        if($authInfo == -1) {
-            $result['statusCode'] = 1;
-            return (object)$result;
-        }
-        
-        $hash = Auth::generateHash($password, $authInfo['salt']);
-        
-        if($hash != $authInfo['password']) {
-            $result['statusCode'] = 2;
-            return (object)$result;
-        }
-        
-        $result['user'] = array('email' => $email, 'userId' => $authInfo['userId'], 'username' => $authInfo['username']);
-        
-        /*
-        if(!self::isVerified($email)) {
-            return 3;
-        }*/
-        
-        return  (object)$result;
     }
     
     private static function isVerified($email) {

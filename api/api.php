@@ -18,4 +18,6 @@ $c['errorHandler'] = function ($c) {
 $app->post('/tryRegister', '\\Bombast\\Routes\\AccountRoutes:tryRegister');
 $app->post('/sessions/create', '\\Bombast\\Routes\\AccountRoutes:tryLogin');
 
+$app->post('/v1/user_auth', '\\Bombast\\Routes\\AuthRoutes:userAuth');
+
 $app->run();
